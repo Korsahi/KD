@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>帮助</title>
+    <style>
+:root {
+        --gold: #D4AF37;
+        --velvet: #2A1B1D;
+        --parchment: #E8D8C4;
+        --blood: #613B3A;
+    }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--velvet);
+            color: var(--parchment);
+            font-family: 'Cormorant Garamond', serif;
+            line-height: 1.8;
+            overflow-x: hidden;
+            min-height: 100vh;
+            /* Ensure full height of viewport */
+            display: flex;
+            /* Flexbox for layout */
+            flex-direction: column;
+            /* Arrange content vertically */
+        }
+
+        /* 渐进式导航栏 */
+        .navbar {
+            background: linear-gradient(165deg, #4A302F 30%, #613B3A 70%);
+            padding: 1.2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav-container {
+            display: flex;
+            gap: 3rem;
+            position: relative;
+        }
+
+        .nav-link {
+            color: var(--parchment);
+            text-decoration: none;
+            font-size: 1.3rem;
+            position: relative;
+            padding: 0.5rem 1rem;
+            transition: 0.4s;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--gold);
+            top: -3px;
+            left: -3px;
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover {
+            text-shadow: 0 0 10px var(--gold);
+        }
+
+        .nav-link:hover::before {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        /* 自适应标题 */
+        .header {
+            margin-top: 100px;
+            padding: 8vh 5vw;
+            background: linear-gradient(rgba(42,27,29,0.9), rgba(42,27,29,0.7)),
+            url('baroque-pattern.png') center/cover;
+            text-align: center;
+            position: relative;
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 30px;
+            background: linear-gradient(to right,
+            transparent 20%,
+            var(--gold) 40%,
+            var(--gold) 60%,
+            transparent 80%
+            );
+        }
+
+        .header h1 {
+            font-size: min(5vw, 4rem);
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.6);
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            letter-spacing: 0.1em;
+        }
+
+        /* 响应式网格布局 */
+        .container {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        /* 艺术卡片 */
+        .article-card {
+            background: #3E2A2C;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            transition: transform 0.3s;
+            border: 1px solid transparent;
+            background-image:
+            linear-gradient(var(--blood), var(--blood)),
+            linear-gradient(45deg, var(--gold) 10%, transparent 30%);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .article-title {
+            font-size: 2.4rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .article-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50%;
+            height: 2px;
+            background: var(--gold);
+            transition: 0.4s;
+        }
+
+        .article-card:hover .article-title::after {
+            width: 100%;
+        }
+
+        /* 卡片展开样式 */
+        .article-card .expand-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s ease-out;
+            color: var(--parchment);
+        }
+
+        .article-card.expanded {
+            background-image:
+            linear-gradient(var(--blood), var(--blood)),
+            linear-gradient(45deg, var(--gold) 20%, transparent 40%);
+        }
+
+        .article-card.expanded .expand-content {
+            max-height: 1000px;
+        }
+
+        /* 侧边栏卡片样式 */
+        .sidebar-card {
+            background: rgba(90, 65, 67, 0.3);
+            margin: 0.8rem 0;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 1px solid transparent;
+            background-image:
+            linear-gradient(var(--blood), var(--blood)),
+            linear-gradient(45deg, var(--gold) 10%, transparent 30%);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+
+        .sidebar-card:hover {
+            background: rgba(100, 75, 77, 0.5);
+            transform: translateX(5px);
+        }
+
+        .sidebar-link {
+            color: var(--parchment);
+            padding: 1rem 1.5rem;
+            position: relative;
+        }
+
+        .sidebar-link::before {
+            content: '✦';
+            position: absolute;
+            left: -0.3em;
+            color: var(--gold);
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .sidebar-card:hover .sidebar-link::before {
+            opacity: 1;
+        }
+
+        .read-more {
+            display: block;
+            color: var(--gold);
+            margin-top: 1rem;
+            font-size: 0.9em;
+        }
+
+        /* 修改侧边栏展开内容的默认padding */
+        .sidebar-card .expand-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s ease-out;
+            padding: 0 !important;
+            /* 确保折叠时无内边距 */
+        }
+
+        .sidebar-card.expanded {
+            background-image:
+            linear-gradient(var(--blood), var(--blood)),
+            linear-gradient(45deg, var(--gold) 20%, transparent 40%);
+            margin-bottom: 1rem;
+        }
+
+        /* 展开时恢复内边距 */
+        .sidebar-card.expanded .expand-content {
+            padding: 0 1.5rem 1rem !important;
+        }
+
+        /* 优化后的侧边栏链接 */
+        .sidebar a {
+            display: block;
+            color: var(--parchment);
+            text-decoration: none;
+            padding: 1rem 1.5rem;
+            margin: 0.8rem 0;
+            position: relative;
+            transition: 0.3s;
+            background: rgba(90, 65, 67, 0.3);
+            border-radius: 3px;
+        }
+
+        .sidebar a::before {
+            content: '✦';
+            position: absolute;
+            left: -0.8em;
+            color: var(--gold);
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            background: rgba(100, 75, 77, 0.5);
+            transform: translateX(10px);
+        }
+
+        .sidebar a:hover::before {
+            opacity: 1;
+            left: -0.3em;
+        }
+
+        .sidebar hr {
+            border: 1px solid var(--gold);
+            opacity: 0.2;
+            margin: 1.5rem 0;
+        }
+
+        .sidebar h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* 装饰侧边栏 */
+        .sidebar {
+            background:
+            radial-gradient(circle at top left, var(--gold) 0%, transparent 15%),
+            linear-gradient(15deg, #3E2A2C 30%, #4A302F 70%);
+            padding: 2rem;
+            position: relative;
+            height: fit-content;
+            border-left: 5px solid var(--gold);
+        }
+
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 20px;
+            height: 20px;
+            background: var(--gold);
+            transform: rotate(45deg);
+        }
+
+        /* 交互元素 */
+        blockquote {
+            border-left: 3px solid var(--gold);
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            position: relative;
+            background: rgba(0,0,0,0.2);
+            font-style: italic;
+        }
+
+        blockquote::before {
+            content: "“";
+            position: absolute;
+            top: -20px;
+            left: -10px;
+            font-size: 4rem;
+            color: var(--gold);
+            opacity: 0.3;
+        }
+
+        /* 响应式设计 */
+@media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 0 5vw;
+            }
+
+            .sidebar {
+                order: -1;
+                margin-bottom: 3rem;
+                border-left: none;
+                border-bottom: 5px solid var(--gold);
+            }
+        }
+
+@media (max-width: 768px) {
+            .nav-container {
+                gap: 1.5rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .article-card {
+                padding: 1.5rem;
+            }
+
+            .article-title {
+                font-size: 1.8rem;
+            }
+
+            .header::after {
+                width: 80%;
+            }
+        }
+
+@media (max-width: 480px) {
+            .nav-link {
+                font-size: 1.1rem;
+                padding: 0.3rem;
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+        }
+
+        /* 动画效果 */
+@keyframes scrollReveal {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .scroll-reveal {
+            animation: scrollReveal 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        .character-card {
+            display: flex;
+            justify-content: space-between;
+            background: var(--blood);
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 1000px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .character-card:hover {
+            transform: scale(1.05);
+        }
+
+        .character-image img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .character-info {
+            flex: 1;
+            padding-left: 2rem;
+        }
+
+        .character-info h2 {
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .character-info p {
+            font-size: 1.2rem;
+            color: var(--parchment);
+            line-height: 1.6;
+        }
+
+        /* 自定义模态框样式 */
+        .custom-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(42,27,29,0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .custom-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: var(--blood);
+            width: min(90%, 400px);
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            border: 2px solid var(--gold);
+        }
+
+        .custom-modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gold);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .modal-close {
+            color: var(--parchment);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--gold);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .modal-icon {
+            width: 60px;
+            height: 60px;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-message {
+            color: var(--parchment);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            text-align: center;
+            border-top: 1px solid var(--gold);
+        }
+
+        .modal-confirm {
+            background: var(--gold);
+            color: var(--velvet);
+            border: none;
+            padding: 0.8rem 2.5rem;
+            border-radius: 4px;
+            font-family: 'Cinzel', serif;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .modal-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.3);
+        }
+
+        .footer {
+            background: linear-gradient(165deg, #4A302F 30%, #613B3A 70%);
+            color: var(--parchment);
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 1.2rem;
+            border-top: 3px solid var(--gold);
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3);
+            margin-top: auto;
+            /* Push footer to the bottom */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-link scroll-reveal" oncancel="loadContent('../index.html')">首页</a>
+            <a href="story.html" class="nav-link scroll-reveal" onclick="loadContent('story.html')">故事</a>
+            <a href="document.html" class="nav-link scroll-reveal" onclick="loadContent('document.html')">文档</a>
+            <a href="#home" class="nav-link scroll-reveal">帮助</a>
+        </div>
+    </nav>
+
+    <header class="header scroll-reveal">
+        <h1>帮助中心</h1>
+        <p>
+            这里是你获取帮助和解答常见问题的地方。
+        </p>
+    </header>
+
+    <div class="container">
+        
+        <aside class="sidebar scroll-reveal">
+            <h3>其他问题</h3>
+            <div class="sidebar-card" onclick="toggleCard(this)">
+                <div class="sidebar-link">
+                    › 常见问题
+                </div>
+                <div class="expand-content">
+                    <p>
+                        这里是常见问题解答内容...
+                    </p>
+                    <a href="faq.html" class="read-more">查看全部</a>
+                </div>
+            </div>
+            <hr>
+
+            <div class="sidebar-card" onclick="toggleCard(this)">
+                <div class="sidebar-link">
+                    › 使用指南
+                </div>
+                <div class="expand-content">
+                    <p>
+                        这里是使用指南的摘要内容...
+                    </p>
+                    <a href="guidelines.html" class="read-more">阅读完整指南</a>
+                </div>
+            </div>
+            <hr>
+
+            <div class="sidebar-card" onclick="toggleCard(this)">
+                <div class="sidebar-link">
+                    › 联系我们
+                </div>
+                <div class="expand-content">
+                    <p>
+                        工作时间：周一至周五 9:00-18:00
+                    </p>
+                    <a href="contact.html" class="read-more">查看联系方式</a>
+                </div>
+            </div>
+            <hr>
+        </aside>
+    </div>
+
+    <footer class="footer">
+        <p>
+            &copy; 2025 K_D | All Rights Reserved.
+        </p>
+    </footer>
+
+    <div class="custom-modal" id="customModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">系统公告</h3>
+                <span class="modal-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <svg class="modal-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M12,2C6.48,2 2,6.48 2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2zm1,15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                </svg>
+                <p class="modal-message">
+                    此功能正在开发中，敬请期待！
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-confirm">朕知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 滚动动画触发
+        const scrollReveals = document.querySelectorAll('.scroll-reveal');
+
+        const revealOnScroll = () => {
+            scrollReveals.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+
+                if (elementTop < windowHeight * 0.8) {
+                    element.style.opacity = 1;
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener('load', revealOnScroll);
+
+        // 卡片展开功能
+        function toggleCard(card) {
+            card.classList.toggle('expanded');
+            const content = card.querySelector('.expand-content');
+            content.style.maxHeight = content.style.maxHeight ? null: `${content.scrollHeight}px`;
+        }
+
+        // 阻止侧边栏二级链接跳转并弹出公告
+        // 修改后的JavaScript部分
+        document.querySelectorAll('.sidebar-card .expand-content a').forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                showCustomModal();
+            });
+        });
+
+        // 显示自定义模态框
+        function showCustomModal() {
+            const modal = document.getElementById('customModal');
+            modal.classList.add('active');
+
+            // 关闭功能
+            const closeElements = [modal, modal.querySelector('.modal-close'), modal.querySelector('.modal-confirm')];
+            closeElements.forEach(el => {
+                el.addEventListener('click', () => modal.classList.remove('active'));
+            });
+
+            // ESC键关闭
+            document.addEventListener('keydown',
+                function(e) {
+                    if (e.key === 'Escape') modal.classList.remove('active');
+                });
+        }
+    </script>
+</body>
+</html>
